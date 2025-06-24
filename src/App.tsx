@@ -3,32 +3,27 @@ import './App.scss';
 
 import usersFromServer from './api/users';
 import todosFromServer from './api/todos';
-import { TodoList } from './components/TodoList';
+import { TodoList } from './components/TodoList/TodoList';
 
 export const App = () => {
   // Estado para os todos e campos do formulário
-  const [todos] = useState(
-    todosFromServer.map(todo => {
-      const user = usersFromServer.find(user => user.id === todo.userId);
-
-      return {
-        ...todo,
-        user: user || { id: 0, name: '', username: '', email: '' }, // Default user if not found
-      };
-    }),
+  const [todos, setTodos] = useState(
+    todosFromServer.map(todo => ({
+      ...todo,
+      user: usersFromServer.find(u => u.id === todo.userId),
+    })),
   );
   const [title, setTitle] = useState('');
   const [userId, setUserId] = useState('');
   const [titleError, setTitleError] = useState(false);
   const [userError, setUserError] = useState(false);
 
-  // Função para limpar caracteres inválidos do título
+  // Limpa caracteres inválidos do título
   const sanitizeTitle = (value: string) => {
-    // Aceita letras (en/ua), dígitos e espaços
     return value.replace(/[^a-zA-Zа-яА-ЯёЁіІїЇєЄ0-9 ]/g, '');
   };
 
-  // manipulação de envio do formulário
+  // Manipulador de envio do formulário
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
 
@@ -48,6 +43,19 @@ export const App = () => {
       return;
     }
 
+    // Cria novo TODO
+    const newId = Math.max(0, ...todos.map(todo => todo.id)) + 1;
+    const user = usersFromServer.find(u => u.id === +userId);
+
+    const newTodo = {
+      id: newId,
+      title: title.trim(),
+      userId: +userId,
+      completed: false,
+      user,
+    };
+
+    setTodos([...todos, newTodo]);
     setTitle('');
     setUserId('');
     setTitleError(false);
@@ -92,9 +100,9 @@ export const App = () => {
             onChange={handleUserChange}
           >
             <option value="">Choose a user</option>
-            {usersFromServer.map(user => (
-              <option key={user.id} value={user.id}>
-                {user.name}
+            {usersFromServer.map(u => (
+              <option key={u.id} value={u.id}>
+                {u.name}
               </option>
             ))}
           </select>
