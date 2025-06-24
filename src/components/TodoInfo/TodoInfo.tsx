@@ -1,3 +1,5 @@
+import React from 'react';
+
 export const TodoInfo = ({ todo }) => (
   <article
     data-id={todo.id}

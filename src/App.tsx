@@ -3,10 +3,16 @@ import './App.scss';
 
 import usersFromServer from './api/users';
 import todosFromServer from './api/todos';
+import { TodoList } from './components/TodoList';
 
 export const App = () => {
   // Estado para os todos e campos do formulário
-  const [todos, setTodos] = useState(todosFromServer);
+  const [todos, setTodos] = useState(
+    todosFromServer.map(todo => ({
+      ...todo,
+      user: usersFromServer.find(user => user.id === todo.userId),
+    }))
+  );
   const [title, setTitle] = useState('');
   const [userId, setUserId] = useState('');
   const [titleError, setTitleError] = useState(false);
@@ -79,7 +85,7 @@ export const App = () => {
             id="titleInput"
             type="text"
             data-cy="titleInput"
-            placeholder="Digite o título"
+            placeholder="Enter a title"
             value={title}
             onChange={handleTitleChange}
           />
@@ -109,20 +115,8 @@ export const App = () => {
         </button>
       </form>
 
-      <section className="TodoList">
-        {todos.map(todo => (
-          <article
-            key={todo.id}
-            data-id={todo.id}
-            className={`TodoInfo${todo.completed ? ' TodoInfo--completed' : ''}`}
-          >
-            <h2 className="TodoInfo__title">{todo.title}</h2>
-            <a className="UserInfo" href={`mailto:${todo.user?.email}`}>
-              {todo.user?.name}
-            </a>
-          </article>
-        ))}
-      </section>
+
+      <TodoList todos={todos} />
     </div>
   );
 };

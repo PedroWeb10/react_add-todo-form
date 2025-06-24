@@ -23,9 +23,9 @@ interface TodolistProps {
 export const TodoList: React.FC<TodolistProps> = ({ todos }) => {
   return (
     <section className="TodoList">
-      {todos.map(todo => (
-        <TodoInfo key={todo.id} todo={todo} />
-      ))}
-    </section>
-  );
-};
+    {todos.map(todo => (
+      <TodoInfo key={todo.id} todo={todo} />
+    ))}
+  </section>
+);
+}
