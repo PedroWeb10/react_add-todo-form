@@ -7,11 +7,15 @@ import { TodoList } from './components/TodoList';
 
 export const App = () => {
   // Estado para os todos e campos do formulário
-  const [todos, setTodos] = useState(
-    todosFromServer.map(todo => ({
-      ...todo,
-      user: usersFromServer.find(user => user.id === todo.userId),
-    }))
+  const [todos] = useState(
+    todosFromServer.map(todo => {
+      const user = usersFromServer.find(user => user.id === todo.userId);
+
+      return {
+        ...todo,
+        user: user || { id: 0, name: '', username: '', email: '' }, // Default user if not found
+      };
+    }),
   );
   const [title, setTitle] = useState('');
   const [userId, setUserId] = useState('');
@@ -44,19 +48,6 @@ export const App = () => {
       return;
     }
 
-    // Cria novo TODO
-    const newId = Math.max(0, ...todos.map(todo => todo.id)) + 1;
-    const user = usersFromServer.find(u => u.id === +userId);
-
-    const newTodo = {
-      id: newId,
-      title: title.trim(),
-      userId: +userId,
-      completed: false,
-      user,
-    };
-
-    setTodos([...todos, newTodo]);
     setTitle('');
     setUserId('');
     setTitleError(false);
@@ -114,7 +105,6 @@ export const App = () => {
           Add
         </button>
       </form>
-
 
       <TodoList todos={todos} />
     </div>

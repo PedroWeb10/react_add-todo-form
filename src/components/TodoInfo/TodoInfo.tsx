@@ -1,6 +1,22 @@
 import React from 'react';
 
-export const TodoInfo = ({ todo }) => (
+interface User {
+  name: string;
+  email: string;
+}
+
+interface Todo {
+  id: number | string;
+  title: string;
+  completed: boolean;
+  user?: User;
+}
+
+interface TodoInfoProps {
+  todo: Todo;
+}
+
+export const TodoInfo: React.FC<TodoInfoProps> = ({ todo }) => (
   <article
     data-id={todo.id}
     className={`TodoInfo${todo.completed ? ' TodoInfo--completed' : ''}`}

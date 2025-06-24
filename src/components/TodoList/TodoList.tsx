@@ -16,16 +16,16 @@ interface Todo {
   user: User;
 }
 
-interface TodolistProps {
+interface Todolist {
   todos: Todo[];
 }
 
-export const TodoList: React.FC<TodolistProps> = ({ todos }) => {
+export const TodoList: React.FC<Todolist> = ({ todos }) => {
   return (
     <section className="TodoList">
-    {todos.map(todo => (
-      <TodoInfo key={todo.id} todo={todo} />
-    ))}
-  </section>
-);
-}
+      {todos.map(todo => (
+        <TodoInfo key={todo.id} todo={todo} />
+      ))}
+    </section>
+  );
+};
