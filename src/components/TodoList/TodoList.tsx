@@ -1,4 +1,5 @@
 import React from 'react';
+import { TodoInfo } from '../TodoInfo';
 
 interface User {
   id: number;
@@ -23,16 +24,7 @@ export const TodoList: React.FC<TodolistProps> = ({ todos }) => {
   return (
     <section className="TodoList">
       {todos.map(todo => (
-        <article
-          key={todo.id}
-          data-id={todo.id}
-          className={`TodoInfo ${todo.completed ? 'TodoInfo--completed' : ''}`}
-        >
-          <h2 className="TodoInfo__title">{todo.title}</h2>
-          <a className="UserInfo" href={`mailto: ${todo.user.email}`}>
-            {todo.user.email}
-          </a>
-        </article>
+        <TodoInfo key={todo.id} todo={todo} />
       ))}
     </section>
   );
